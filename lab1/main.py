@@ -1,28 +1,22 @@
 def swap(array:list, index1: int, index2: int):
     array[index1], array[index2] = array[index2], array[index1]
 
-def subarray(array):
+
+def subarray(array: list, is_reversed=False):
     N = len(array)
-    if N == 1 or array == sorted(array.copy()):
+
+    if array == sorted(array, reverse=is_reversed):
         return (-1, -1)
 
-    list_for_index = set()
-    for i in range(0, N-1):
+    compare = lambda a, b: a > b if is_reversed else a < b
 
-        min_index = i
+    min_index = N - 1
+    max_index = 0
+
+    for i, val in enumerate(array):
         for j in range(i + 1, N):
+            if compare(array[j], val):
+                min_index = min(min_index, i)
+                max_index = max(max_index, j)
 
-            if array[j] < array[min_index]:
-                min_index = j
-                list_for_index.add(i)
-                list_for_index.add(j)
-                swap(array, i, min_index)
-
-    min_index = min(list_for_index)
-    max_index = max(list_for_index)
     return (min_index, max_index)
-
-if __name__ == "__main__":
-    array = [1, 2, 4, 7, 10, 11, 7, 12, 6, 7, 16, 18, 19]
-
-    print(subarray(array))
